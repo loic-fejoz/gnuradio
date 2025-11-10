@@ -1,0 +1,22 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "GRC MCP",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "/home/loic/projets/gnuradio/grc/scripts/gnuradio-companion",
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "args": "--mcp --qt",
+            "env": {
+                "PYTHONPATH": "/home/loic/projets/gnuradio/.venv/lib/python3.13/site-packages:/home/loic/projets/gnuradio:/usr/lib/python3/dist-packages/",
+                "GRC_BLOCKS_PATH": "/home/loic/projets/gnuradio/grc/blocks",
+                "GR_DONT_LOAD_PREFS": "1"
+            }
+        }
+    ]
+}

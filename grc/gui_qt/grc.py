@@ -74,7 +74,7 @@ class Application(QtWidgets.QApplication):
         # Setup the main application window
         log.debug("Creating main application window")
         stopwatch = StopWatch()
-        self.MainWindow = components.MainWindow(file_path)
+        self.MainWindow = components.MainWindow(file_path, settings.run_mcp)
         stopwatch.lap("mainwindow")
         level_str = self.qsettings.value('grc/console_log_level', "info", type=str)
         if level_str == "info":
@@ -164,4 +164,4 @@ class Application(QtWidgets.QApplication):
         """Launches the main QT event loop"""
         # Show the main window after everything is initialized.
         self.MainWindow.show()
-        return self.exec_()
+        return self.exec()

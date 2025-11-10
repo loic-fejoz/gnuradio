@@ -19,6 +19,7 @@ class Properties(object):
         self.window = Window()
         self.colors = Colors()
         self.types = Types()
+        self.run_mcp = False
 
 
 class Paths(object):

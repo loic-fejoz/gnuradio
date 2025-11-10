@@ -31,6 +31,8 @@ from typing import Union
 from qtpy import QtCore, QtGui, QtWidgets
 from qtpy.QtCore import Qt
 
+from grc.gui_qt.components import mcp
+
 # Custom modules
 from .flowgraph_view import FlowgraphView
 from .canvas.flowgraph import FlowgraphScene
@@ -67,7 +69,7 @@ QStyle = QtWidgets.QStyle
 
 
 class MainWindow(QtWidgets.QMainWindow, base.Component):
-    def __init__(self, file_path=[]):
+    def __init__(self, file_path=[], run_mcp=False):
         QtWidgets.QMainWindow.__init__(self)
         # base.Component.__init__(self)
 
@@ -202,6 +204,12 @@ class MainWindow(QtWidgets.QMainWindow, base.Component):
         ExampleFinder.signals.result.connect(self.populate_libraries_w_examples)
         ExampleFinder.signals.progress.connect(self.update_progress_bar)
         self.threadpool.start(ExampleFinder)
+
+        if run_mcp:
+            self.mcpthreadpool = QtCore.QThreadPool()
+            self.mcpthreadpool.setMaxThreadCount(1)
+            mcp_worker = mcp.MCPWorker(self)
+            self.mcpthreadpool.start(mcp_worker)
 
     """def show(self):
         log.debug("Showing main window")

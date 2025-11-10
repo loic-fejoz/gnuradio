@@ -11,7 +11,7 @@ import types
 import logging
 import yaml
 from operator import methodcaller, attrgetter
-from typing import (List, Set, Optional, Iterator, Iterable, Tuple, Union, OrderedDict)
+from typing import (Any, List, Set, Optional, Iterator, Iterable, Tuple, Union, OrderedDict)
 
 from . import Messages
 from .base import Element
@@ -392,7 +392,7 @@ class FlowGraph(Element):
     ##############################################
     # Import/Export Methods
     ##############################################
-    def export_data(self) -> OrderedDict[str, str]:
+    def export_data(self) -> OrderedDict[str, Any]:
         """
         Export this flow graph to nested data.
         Export all block and connection data.

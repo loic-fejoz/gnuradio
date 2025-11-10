@@ -118,6 +118,8 @@ def run_qt(args, log):
     # TODO: Move argv to separate argument parsing class that overrides default properties?
     # TODO: Split settings/constants into separate classes rather than a single properites class?
     settings = properties.Properties(sys.argv)
+    settings.run_mcp = args.mcp
+    print("Running with MCP? ", args.mcp)
 
     ''' Translation Support '''
     # Try to get the current locale. Always add English
@@ -276,6 +278,7 @@ def main():
 
     # Logging support
     parser.add_argument('--log', choices=['debug', 'info', 'warning', 'error', 'critical'], default='info')
+    parser.add_argument('--mcp', default=False, action='store_true', help='Enable MCP Server')
     # TODO: parser.add_argument('--log-output')
 
     # Graphics framework (QT or GTK)
