@@ -121,6 +121,21 @@ def partial_update_flowgraph(patchs: List[OrderedDict[str, Any]]) -> List[Ordere
     fg = mcp.currentFlowgraph
     result=[]
     for patch_op in patchs:
+        # Map and normalize actions
+        if patch_op['op'] == 'add' and patch_op.get('path', '').startswith('/block'):
+            # map `add /block(s)?/foo`
+            patch_op['op'] = 'add_block'
+            path = patch_op['path'].split('/')
+            if len(path) > 2:
+                name = patch_op['path'] = path[2]
+                value = patch_op.get('value', {})
+                if 'name' not in value:
+                    value['name'] = name
+        elif patch_op['op'] == 'remove' and patch_op.get('path', '').startswith('/block'):
+            patch_op['op'] = 'remove_block'
+            patch_op['path'] = patch_op['path'].split('/')[2]
+
+        # Handle actions
         if patch_op['op'] == 'add_block':
             value = patch_op.get('value', {})
             block_id = value.get('id', None)
@@ -133,21 +148,22 @@ def partial_update_flowgraph(patchs: List[OrderedDict[str, Any]]) -> List[Ordere
                 result.append({'status': f'block {block_id} created: {str(new_blk)}'})
             else:
                 result.append({'status': f'failed to create block {block_id}'})
+
         elif patch_op['op'] == 'remove_block':
-            block_id = patch_op.get('path', None)
+            block_name = patch_op.get('path', None)
             try:
-                blk_to_remove = fg.get_block(block_id)
+                blk_to_remove = fg.get_block(block_name)
             except KeyError:
                 blk_to_remove = None
             if blk_to_remove:
                 try:
                     fg.remove_element(blk_to_remove)
                     mcp.currentFlowgraphScene.update()
-                    result.append({'status': f'block {block_id} removed'})
+                    result.append({'status': f'block {block_name} removed'})
                 except:
-                    result.append({'status': f'failed to remove block {block_id}'})
+                    result.append({'status': f'failed to remove block {block_name}'})
             else:
-                result.append({'status': f'failed to remove unknown block {block_id}'})
+                result.append({'status': f'failed to remove unknown block {block_name}'})
         else:
             result.append({'status': 'patch operation ignored', 'op': patch_op})
     return result

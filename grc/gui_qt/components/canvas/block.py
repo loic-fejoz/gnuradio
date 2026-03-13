@@ -1,7 +1,7 @@
 import logging
 
 from qtpy.QtGui import QPen, QPainter, QBrush, QFont, QFontMetrics
-from qtpy.QtCore import Qt, QPointF, QRectF, QUrl
+from qtpy.QtCore import Qt, QPointF, QRectF, QUrl, QVariant
 from qtpy.QtWidgets import QGraphicsItem, QApplication, QAction
 
 from . import colors
@@ -430,6 +430,8 @@ class GUIBlock(QGraphicsItem):
             value.setX(round(value.x() / grid_size) * grid_size)
             value.setY(round(value.y() / grid_size) * grid_size)
             return value
+        elif type(value) == QVariant:
+            pass
         else:
             return QGraphicsItem.itemChange(self, change, value)
 
